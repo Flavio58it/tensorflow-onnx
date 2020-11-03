@@ -22,7 +22,7 @@ steps:
     fi
 
     python setup.py install
-    pip install --index-url https://test.pypi.org/simple/ onnx
+    pip install --index-url https://test.pypi.org/simple/ onnx==1.8
     pip freeze --all
   displayName: 'Setup Environment'
 
