@@ -774,7 +774,12 @@ class Graph(object):
         input_shapes = [self.get_shape(i) for i in node.input]
         input_dtypes = [self.get_dtype(i) for i in node.input]
 
-        shapes, dtypes = infer_onnx_shape_dtype(node, self._opset, input_shapes, input_dtypes, initializers)
+        try:
+            shapes, dtypes = infer_onnx_shape_dtype(node, self._opset, input_shapes, input_dtypes, initializers)
+        except RuntimeError:  # pylint: disable=broad-except
+            logger.warning("ONNX Failed to infer shapes and dtypes for [%s]", node.name, exc_info=1)
+            shapes = None
+            dtypes = None
         if not shapes or not dtypes:
             return
 
